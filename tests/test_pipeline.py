@@ -67,3 +67,28 @@ def test_budget_enforced(tmp_path):
     run = _run(db)
     assert run["status"] == "failed"
     assert "weekly_llm_usd" in (run["error"] or "")
+
+def test_run_finishes_after_every_draft_is_reviewed(tmp_path):
+    db = _db(tmp_path)
+    run = _run(db)
+    drafts = db.q("SELECT * FROM drafts WHERE run_id=? ORDER BY format", (run["id"],))
+
+    approve(db, drafts[0]["id"])
+    reject(db, drafts[1]["id"], reason="not useful")
+    assert db.one("SELECT status FROM runs WHERE id=?", (run["id"],))["status"] == "awaiting_approval"
+
+    edit(db, drafts[2]["id"], drafts[2]["body"] + "\n\nTighter ending.")
+
+    assert db.one("SELECT status FROM runs WHERE id=?", (run["id"],))["status"] == "done"
+    events = db.q("SELECT event FROM run_events WHERE run_id=? ORDER BY id", (run["id"],))
+    assert events[-1]["event"] == "status:done"
+
+
+def test_run_stays_open_while_any_draft_is_pending(tmp_path):
+    db = _db(tmp_path)
+    run = _run(db)
+    first = db.one("SELECT * FROM drafts WHERE run_id=? ORDER BY format LIMIT 1", (run["id"],))
+
+    approve(db, first["id"])
+
+    assert db.one("SELECT status FROM runs WHERE id=?", (run["id"],))["status"] == "awaiting_approval"

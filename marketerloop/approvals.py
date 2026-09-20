@@ -5,13 +5,30 @@ import difflib
 
 from .db import DB, new_id
 
+
+def _finish_run_if_reviewed(db: DB, draft_id: str) -> None:
+    draft = db.one("SELECT run_id FROM drafts WHERE id=?", (draft_id,))
+    if not draft:
+        return
+    pending = db.one(
+        "SELECT COUNT(*) AS count FROM drafts WHERE run_id=? AND status='pending'",
+        (draft["run_id"],),
+    )["count"]
+    if pending == 0:
+        run = db.one("SELECT status FROM runs WHERE id=?", (draft["run_id"],))
+        if run and run["status"] == "awaiting_approval":
+            db.set_status(draft["run_id"], "done")
+
+
 def approve(db: DB, draft_id: str):
     db.execute("UPDATE drafts SET status='approved' WHERE id=?", (draft_id,))
     db.draft_event(draft_id, "approved")
+    _finish_run_if_reviewed(db, draft_id)
 
 def reject(db: DB, draft_id: str, reason: str | None = None):
     db.execute("UPDATE drafts SET status='rejected' WHERE id=?", (draft_id,))
     db.draft_event(draft_id, "rejected", reason=reason)
+    _finish_run_if_reviewed(db, draft_id)
 
 def edit(db: DB, draft_id: str, final_body: str) -> dict:
     draft = db.one("SELECT * FROM drafts WHERE id=?", (draft_id,))
@@ -31,4 +48,5 @@ def edit(db: DB, draft_id: str, final_body: str) -> dict:
         "created_at": __import__("datetime").datetime.now(
             __import__("datetime").timezone.utc).isoformat(timespec="seconds"),
     })
+    _finish_run_if_reviewed(db, draft_id)
     return {"diff": diff}
