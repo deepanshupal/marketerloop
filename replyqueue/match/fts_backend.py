@@ -63,5 +63,9 @@ class FTSBackend:
         # bm25() returns negative values; more negative = better. Normalize to 0..1.
         ranks = [r["rank"] for r in rows]
         best, worst = min(ranks), max(ranks)
-        span = (worst - best) or 1.0
+        if best == worst:
+            # A single match (or tied matches) is still a valid match. The old
+            # zero-span fallback assigned 0.0, silently dropping every result.
+            return {r["item_id"]: 1.0 for r in rows}
+        span = worst - best
         return {r["item_id"]: (worst - r["rank"]) / span for r in rows}

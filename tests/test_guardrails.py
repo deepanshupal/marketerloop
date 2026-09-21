@@ -7,7 +7,8 @@ from replyqueue.guardrails import check_approve, GuardrailBlock
 from tests.conftest import make_item
 
 
-def _decide(conn, item_id, promotional, decided_at="2026-09-10T00:00:00Z"):
+def _decide(conn, item_id, promotional, decided_at=None):
+    decided_at = decided_at or utcnow()
     cur = conn.execute(
         "INSERT INTO drafts(item_id, text, status, promotional, created_at, decided_at)"
         " VALUES (?, 'x', 'approved', ?, ?, ?)",
