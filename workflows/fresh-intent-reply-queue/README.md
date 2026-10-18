@@ -43,8 +43,8 @@ WATCH       posted permalinks are polled 72h; a mod-removal is a label, not a lo
 ## Quickstart
 
 ```bash
-git clone https://github.com/DeepanshuPal/fresh-intent-reply-queue
-cd fresh-intent-reply-queue
+git clone https://github.com/DeepanshuPal/marketerloop
+cd marketerloop/workflows/fresh-intent-reply-queue
 pip install -e .
 replyqueue init                 # creates replyqueue.yaml + the database
 $EDITOR replyqueue.yaml         # your subreddits, keywords, ICP, voice

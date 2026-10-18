@@ -1,0 +1,2 @@
+[console_scripts]
+marketerloop = marketerloop.cli:main

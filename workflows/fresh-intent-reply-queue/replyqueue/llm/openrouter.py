@@ -23,7 +23,7 @@ class OpenRouterLLM:
             base_url="https://openrouter.ai/api/v1",
             headers={
                 "Authorization": f"Bearer {cfg.api_key()}",
-                "HTTP-Referer": "https://github.com/DeepanshuPal/fresh-intent-reply-queue",
+                "HTTP-Referer": "https://github.com/DeepanshuPal/marketerloop/tree/main/workflows/fresh-intent-reply-queue",
                 "X-Title": "fresh-intent-reply-queue",
             },
             timeout=httpx.Timeout(cfg.request_timeout_seconds + 60),

@@ -34,13 +34,18 @@ There is no visual builder and no hosted account. Clone it, bring your own keys,
 
 ## Workflow catalog
 
-Templates that fit the shared runner stay as folders. Specialized workflows ship as focused repos while their interfaces settle, but they are catalog entries under Marketerloop, not separate product bets.
+```
+templates/   native templates run by the shared marketerloop runner
+workflows/   focused workflows with their own CLI (cd into the folder to install and run)
+```
+
+Templates that fit the shared runner live in `templates/`. Specialized workflows with their own CLI live in `workflows/`; each is a self-contained package (own `pyproject.toml`, tests, Dockerfile and README) and has its own CI job.
 
 | workflow | status | what it does |
 |---|---|---|
 | [`meeting-to-content`](templates/meeting-to-content) | native template | Transcript or notes -> timestamped ideas -> LinkedIn post, X thread and newsletter blurb -> approval queue. Confidential lines are flagged and excluded. |
-| [`fresh-intent-reply-queue`](https://github.com/DeepanshuPal/fresh-intent-reply-queue) | standalone workflow | Reddit RSS + HN intent signals -> ICP match -> scored reply drafts -> human approval. |
-| [`linkedin-visitor-conversion`](https://github.com/DeepanshuPal/linkedin-visitor-conversion) | standalone workflow | Manual LinkedIn visitor/follower CSV -> ICP qualification -> connection-note drafts -> human approval and export. |
+| [`fresh-intent-reply-queue`](workflows/fresh-intent-reply-queue) | workflow (own CLI) | Reddit RSS + HN intent signals -> ICP match -> scored reply drafts -> human approval. |
+| [`linkedin-visitor-conversion`](workflows/linkedin-visitor-conversion) | workflow (own CLI) | Manual LinkedIn visitor/follower CSV -> ICP qualification -> connection-note drafts -> human approval and export. |
 | `citation-queue` ([spec](docs/specs/citation-queue.md)) | spec, not built | [am-i-cited](https://github.com/DeepanshuPal/am-i-cited) citation feed -> durable cited threads -> participation drafts -> human approval. The durable-signal companion to fresh intent. |
 
 All three share the same operating rules: local state, BYOK models, append-only run evidence, explicit budgets, and no external write without human approval. As their contracts stabilize, they can move behind the common runner without breaking their focused CLIs.

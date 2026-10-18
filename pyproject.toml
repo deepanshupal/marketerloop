@@ -29,3 +29,7 @@ include = ["marketerloop*"]
 
 [tool.setuptools.package-data]
 marketerloop = ["templates/**/*"]
+
+[tool.pytest.ini_options]
+# Each folder under workflows/ is its own package with its own tests and CI job.
+testpaths = ["tests"]

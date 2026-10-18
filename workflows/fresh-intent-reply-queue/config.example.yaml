@@ -72,7 +72,7 @@ guardrails:
   min_nonpromo_per_promo: 3     # at least N non-promotional approvals per promotional one
 
 # --- HTTP ---
-user_agent: "fresh-intent-reply-queue/0.1 (+https://github.com/DeepanshuPal/fresh-intent-reply-queue)"
+user_agent: "fresh-intent-reply-queue/0.1 (+https://github.com/DeepanshuPal/marketerloop/tree/main/workflows/fresh-intent-reply-queue)"
 request_timeout_seconds: 30
 
 # --- Storage ---

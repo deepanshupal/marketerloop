@@ -21,3 +21,33 @@ jobs:
       - run: MOCK_LLM=1 pytest -q
       - name: template evals (deterministic, no keys)
         run: MOCK_LLM=1 python templates/meeting-to-content/evals/eval.py
+
+  linkedin-visitor-conversion:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: workflows/linkedin-visitor-conversion
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -r requirements.txt
+      - run: pip install .
+      - name: end-to-end pipeline test (mock provider, no keys, no network)
+        run: python -m unittest discover -s tests -v
+
+  fresh-intent-reply-queue:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: workflows/fresh-intent-reply-queue
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e .[dev]
+      - run: pytest -q
+      - name: precision gate harness (synthetic week, no keys)
+        run: python evals/precision_gate.py --demo

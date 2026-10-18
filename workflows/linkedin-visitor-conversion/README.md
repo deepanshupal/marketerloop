@@ -48,6 +48,8 @@ counts, token usage and cost. Nothing is silently overwritten.
 
 ## Install
 
+This workflow lives in the Marketerloop repo. Run these from `workflows/linkedin-visitor-conversion/` (`git clone https://github.com/DeepanshuPal/marketerloop` first).
+
 ```bash
 pip install -r requirements.txt
 pip install .

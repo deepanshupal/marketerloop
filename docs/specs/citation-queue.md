@@ -5,7 +5,7 @@ contract a first implementation must satisfy before it joins the catalog.
 
 ## The bet
 
-[fresh-intent-reply-queue](https://github.com/DeepanshuPal/fresh-intent-reply-queue)
+[fresh-intent-reply-queue](https://github.com/DeepanshuPal/marketerloop/tree/main/workflows/fresh-intent-reply-queue)
 answers *fresh* intent: someone asked a buying question on Reddit or HN an
 hour ago. Its known weakness is the other half of the surface: the threads
 the answer engines already cite when a buyer asks ChatGPT, Gemini or
